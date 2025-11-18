@@ -693,50 +693,49 @@ void editorDrawStatusBar(void) {
 /* -------- welcome screen -------- */
 
 const char* welcome_lines[] = {
-    "~",
-    "~     ########  #### ########     ###    ",
-    "~     ##     ##  ##  ##     ##   ## ##   ",
-    "~     ##     ##  ##  ##     ##  ##   ##  ",
-    "~     ##     ##  ##  ########  ##     ## ",
-    "~     ##     ##  ##  ##   ##   ######### ",
-    "~     ##     ##  ##  ##    ##  ##     ## ",
-    "~     ########  #### ##     ## ##     ## ",
-    "~",
-    "~            DIRA version 1.0",
-    "~        Terminal Text Editor",
-    "~",
-    "~",
-    "~ ┌────────────────────────────────────────────────────────────────────┐",
-    "~ │                        QUICK START GUIDE                           │",
-    "~ ├────────────────────────────────────────────────────────────────────┤",
-    "~ │                                                                    │",
-    "~ │  BASIC EDITING              SELECTION & CLIPBOARD                 │",
-    "~ │  ══════════════              ══════════════════════                │",
-    "~ │  Arrow Keys ....... Move     Shift+Arrows ..... Select text       │",
-    "~ │  Home/End ......... Line     Ctrl-A ........... Select all        │",
-    "~ │  Page Up/Down ..... Scroll   Ctrl-C ........... Copy              │",
-    "~ │  Backspace/Delete . Remove   Ctrl-X ........... Cut               │",
-    "~ │  Tab .............. Spaces   Ctrl-V ........... Paste             │",
-    "~ │  Enter ............ New line Escape ........... Clear selection   │",
-    "~ │                                                                    │",
-    "~ │  FILE OPERATIONS            EDITING COMMANDS                      │",
-    "~ │  ════════════════            ════════════════                      │",
-    "~ │  Ctrl-S ........... Save     Ctrl-Z ........... Undo              │",
-    "~ │  Ctrl-Q ........... Quit     Ctrl-Y ........... Redo              │",
-    "~ │  ./editor <file> .. Open     Ctrl-F ........... Find (coming!)    │",
-    "~ │                                                                    │",
-    "~ │  FEATURES                                                          │",
-    "~ │  ════════                                                          │",
-    "~ │  • Syntax highlighting for C/C++ files                            │",
-    "~ │  • Line numbers with dynamic width                                │",
-    "~ │  • Auto-indentation (matches previous line)                       │",
-    "~ │  • Efficient gap buffer for large files                           │",
-    "~ │  • Memory-efficient undo/redo system                              │",
-    "~ │                                                                    │",
-    "~ └────────────────────────────────────────────────────────────────────┘",
-    "~",
-    "~              Press any key to start editing...",
-    "~",
+    "",
+    "        ########  #### ########     ###    ",
+    "        ##     ##  ##  ##     ##   ## ##   ",
+    "        ##     ##  ##  ##     ##  ##   ##  ",
+    "        ##     ##  ##  ########  ##     ## ",
+    "        ##     ##  ##  ##   ##   ######### ",
+    "        ##     ##  ##  ##    ##  ##     ## ",
+    "        ########  #### ##     ## ##     ## ",
+    "",
+    "                DIRA version 1.0",
+    "            Terminal Text Editor",
+    "",
+    "  +------------------------------------------------------------------+",
+    "  |                      QUICK START GUIDE                           |",
+    "  +------------------------------------------------------------------+",
+    "  |                                                                  |",
+    "  |  BASIC EDITING            SELECTION & CLIPBOARD                 |",
+    "  |  ==============            =====================                 |",
+    "  |  Arrow Keys ..... Move     Shift+Arrows ... Select text         |",
+    "  |  Home/End ....... Line     Ctrl-A ......... Select all          |",
+    "  |  Page Up/Down ... Scroll   Ctrl-C ......... Copy                |",
+    "  |  Backspace/Del .. Remove   Ctrl-X ......... Cut                 |",
+    "  |  Tab ............ Spaces   Ctrl-V ......... Paste               |",
+    "  |  Enter .......... Newline  Escape ......... Clear selection     |",
+    "  |                                                                  |",
+    "  |  FILE OPERATIONS          EDITING COMMANDS                      |",
+    "  |  ================          ================                      |",
+    "  |  Ctrl-S ......... Save     Ctrl-Z ......... Undo                |",
+    "  |  Ctrl-Q ......... Quit     Ctrl-Y ......... Redo                |",
+    "  |  ./editor file .. Open     Ctrl-F ......... Find (soon!)        |",
+    "  |                                                                  |",
+    "  |  FEATURES                                                        |",
+    "  |  ========                                                        |",
+    "  |  * Syntax highlighting for C/C++                                |",
+    "  |  * Line numbers with dynamic width                              |",
+    "  |  * Auto-indentation                                             |",
+    "  |  * Efficient gap buffer                                         |",
+    "  |  * Memory-efficient undo/redo                                   |",
+    "  |                                                                  |",
+    "  +------------------------------------------------------------------+",
+    "",
+    "                Press any key to start editing...",
+    "",
     NULL
 };
 
@@ -764,18 +763,10 @@ void drawWelcomeScreen(void) {
         const char *line = welcome_lines[i];
         int len = strlen(line);
         
-        // Skip the leading ~ for actual content
-        const char *content = line;
-        if (len > 0 && line[0] == '~') {
-            content = line + 1;
-            len--;
-        }
-        
         // Center the line horizontally
-        int content_width = len;
         int left_padding = 0;
-        if (content_width < E.screencols) {
-            left_padding = (E.screencols - content_width) / 2;
+        if (len < E.screencols) {
+            left_padding = (E.screencols - len) / 2;
         }
         
         // Add left padding
@@ -784,27 +775,24 @@ void drawWelcomeScreen(void) {
         }
         
         // Apply colors based on content
-        if (strstr(content, "#") != NULL && strstr(content, "##") != NULL) {
+        if (strstr(line, "####") != NULL) {
             // ASCII art logo
             abufAppend("\x1b[1;36m", 7); // Bold cyan
-        } else if (strstr(content, "DIRA version") != NULL) {
+        } else if (strstr(line, "DIRA version") != NULL) {
             abufAppend("\x1b[1;33m", 7); // Bold yellow
-        } else if (strstr(content, "Terminal Text Editor") != NULL) {
+        } else if (strstr(line, "Terminal Text Editor") != NULL) {
             abufAppend("\x1b[90m", 5); // Gray
-        } else if (strstr(content, "QUICK START GUIDE") != NULL) {
+        } else if (strstr(line, "QUICK START GUIDE") != NULL) {
             abufAppend("\x1b[1;32m", 7); // Bold green
-        } else if (strstr(content, "┌") != NULL || strstr(content, "└") != NULL || 
-                   strstr(content, "├") != NULL || strstr(content, "│") != NULL ||
-                   strstr(content, "─") != NULL || strstr(content, "┐") != NULL ||
-                   strstr(content, "┘") != NULL || strstr(content, "┤") != NULL) {
+        } else if (strstr(line, "+---") != NULL || strstr(line, "| ") != NULL) {
             abufAppend("\x1b[34m", 5); // Blue for box
-        } else if (strstr(content, "BASIC EDITING") != NULL || 
-                   strstr(content, "SELECTION") != NULL ||
-                   strstr(content, "FILE OPERATIONS") != NULL || 
-                   strstr(content, "EDITING COMMANDS") != NULL ||
-                   strstr(content, "FEATURES") != NULL) {
+        } else if (strstr(line, "BASIC EDITING") != NULL || 
+                   strstr(line, "SELECTION") != NULL ||
+                   strstr(line, "FILE OPERATIONS") != NULL || 
+                   strstr(line, "EDITING COMMANDS") != NULL ||
+                   strstr(line, "FEATURES") != NULL) {
             abufAppend("\x1b[1;37m", 7); // Bold white
-        } else if (strstr(content, "Press any key") != NULL) {
+        } else if (strstr(line, "Press any key") != NULL) {
             abufAppend("\x1b[1;35m", 7); // Bold magenta
         }
         
@@ -814,7 +802,7 @@ void drawWelcomeScreen(void) {
             write_len = E.screencols - left_padding;
         }
         if (write_len > 0) {
-            abufAppend(content, write_len);
+            abufAppend(line, write_len);
         }
         
         abufAppend("\x1b[0m", 4); // Reset color
