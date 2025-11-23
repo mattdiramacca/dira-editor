@@ -1,19 +1,22 @@
 /* config.c - Configuration system */
-#include "config.h"
-#include <string.h>
+/* config.h - Configuration system */
+#ifndef CONFIG_H
+#define CONFIG_H
 
-void config_default(Config *cfg) {
-    cfg->tab_width = 4;
-    cfg->show_line_numbers = 1;
-    cfg->auto_indent = 1;
-    cfg->syntax_highlighting = 1;
-    strncpy(cfg->color_scheme, "default", sizeof(cfg->color_scheme) - 1);
-    cfg->show_status_bar = 1;
-    cfg->show_welcome = 1;
-    cfg->create_backup = 0;
-    cfg->auto_save_interval = 0;
-}
+typedef struct {
+    int tab_width;
+    int show_line_numbers;
+    int auto_indent;
+    int syntax_highlighting;
+    char color_scheme[32];
+    int show_status_bar;
+    int show_welcome;
+    int create_backup;
+    int auto_save_interval;
+} Config;
 
+void config_default(Config *cfg);
 
-// comment to test git push // 
+const char* config_get_path(void);
 
+#endif /* CONFIG_H */
